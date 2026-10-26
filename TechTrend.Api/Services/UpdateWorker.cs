@@ -58,8 +58,14 @@ namespace TechTrend.Api.Services
             {
                 try
                 {
-                    await UpdateAllAsync()
+                    await UpdateAllAsync(stoppingToken);
                 }
+                catch(Exception ex)
+                {
+                    logger.LogError(ex, "Technology update failed");
+                }
+
+                await Task.Delay(TimeSpan.FromHours(intervalHours), stoppingToken);
             }
         }
     }
