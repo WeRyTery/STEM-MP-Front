@@ -5,7 +5,9 @@
         public double CalculateChange(double previous, double current)
         {
             if (previous <= 0)
+            {
                 return 0;
+            }
 
             return (current - previous) / previous * 100;
         }

@@ -18,12 +18,11 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGet("/api/health", () => new { status = "ok" });
+app.MapGet("/api/health", () => new { status = "ok" }); // Checking connection method
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
     await db.Database.MigrateAsync();
 
     if (!await db.Technologies.AnyAsync())
@@ -71,14 +70,15 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.MapGet("/api/technologies", async (
-    TechnologyService service,
-    string? search,
-    string? category,
-    string? sort) =>
-{
-    return Results.Ok(
-        await service.GetTechnologiesAsync(search, category, sort));
-});
+app.MapGet("/api/technologies", async (string? search, string? category, string? sort, string? period, string? source, TechnologyService service) =>
+    {
+        return Results.Ok(await service.GetTechnologiesAsync(search, category, sort, period, source));
+    });
+
+app.MapGet("/api/technologies/{id:int}", async (int id, string? period, string? source, TechnologyService service) =>
+    {
+        var technology = await service.GetTechnologyByIdAsync(id, period, source);
+        return technology == null ? Results.NotFound() : Results.Ok(technology);
+    });
 
 app.Run();

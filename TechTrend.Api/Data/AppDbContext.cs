@@ -12,12 +12,9 @@ namespace TechTrend.Api.Data
         {
             modelBuilder.Entity<Technology>().HasIndex(t => t.Name).IsUnique();
 
-            modelBuilder.Entity<TrendSnapshot>().HasIndex(s => new { s.TechnologyId, s.CollectedAt });
+            modelBuilder.Entity<TrendSnapshot>().HasIndex(s => new { s.TechnologyId, s.Source, s.Period, s.CollectedAt });
 
-            modelBuilder.Entity<TrendSnapshot>().
-                HasOne(s => s.Technology).
-                WithMany(t => t.Snapshots).
-                HasForeignKey(s => s.TechnologyId);
+            modelBuilder.Entity<TrendSnapshot>().HasOne(s => s.Technology).WithMany(t => t.Snapshots).HasForeignKey(s => s.TechnologyId);
         }
     }
 }
