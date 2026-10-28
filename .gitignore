@@ -36,3 +36,7 @@ Desktop.ini
 # Frontend
 TechTrend.Api/frontend/node_modules/
 TechTrend.Api/frontend/dist/
+
+# Tests and reports
+**/CoverageReport/
+**/TestResults/

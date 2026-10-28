@@ -1,0 +1,35 @@
+
+name: Backend Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore TechTrend.Api.Tests/TechTrend.Api.Tests.csproj
+
+      - name: Build
+        run: dotnet build TechTrend.Api.Tests/TechTrend.Api.Tests.csproj --no-restore
+
+      - name: Run tests with coverage
+        run: dotnet test TechTrend.Api.Tests/TechTrend.Api.Tests.csproj --no-build --collect:"XPlat Code Coverage"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: "**/coverage.cobertura.xml"
+          if-no-files-found: error
