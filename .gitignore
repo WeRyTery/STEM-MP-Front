@@ -33,3 +33,6 @@ TestResults/
 Thumbs.db
 Desktop.ini
 ```
+# Frontend
+TechTrend.Api/frontend/node_modules/
+TechTrend.Api/frontend/dist/
